@@ -1,8 +1,10 @@
-import {useEffect, useState} from "react";
+import {useEffect, useMemo, useState} from "react";
 
 export const UseEffect = () => {
    const [todo, setTodo] = useState("")
     const [todoList, addTodo] = useState([])
+    const [count, setCount] = useState(0)
+    const calculation = useMemo(() => expensiveCalculation(count), [count])
     useEffect(() => {
         addTodo(JSON.parse(localStorage.getItem("todoList")))
     }, [])
@@ -34,7 +36,19 @@ export const UseEffect = () => {
                     {todoList.map( el => <li key={Math.floor(Math.random() * 100)}>{el} <button onClick={() => handleDone(el)}>Done</button> </li>)}
                 </ul>
                 <button onClick={() => localStorage.setItem("todoList", JSON.stringify(todoList))}>Save Todo</button>
+                <br/>
+                <button onClick={() => setCount(count + 1)}>Calculate</button>
+                <p>you have calculated {calculation}</p>
             </div>
         </>
     );
 }
+
+
+const expensiveCalculation = (num) => {
+    console.log("Calculating...");
+    for (let i = 0; i < 1000000000; i++) {
+        num += 1;
+    }
+    return num;
+};

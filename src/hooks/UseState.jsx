@@ -5,7 +5,7 @@ export const UseState = () => {
 
     return (
         <>
-            <h1>useEffect</h1>
+            <h1>useState</h1>
             <button onClick={() => setCount(prevState => prevState + 1)}>+</button>
             <span>{count}</span>
             <button onClick={() => setCount(prevState => prevState - 1 )}>-</button>

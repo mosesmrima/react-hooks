@@ -4,7 +4,7 @@ export const UseEffect = () => {
    const [todo, setTodo] = useState("")
     const [todoList, addTodo] = useState([])
     const [count, setCount] = useState(0)
-    const calculation = useMemo(() => expensiveCalculation(count), [count])
+    const val = useMemo(() => delay(count), [count])
     useEffect(() => {
         addTodo(JSON.parse(localStorage.getItem("todoList")))
     }, [])
@@ -13,11 +13,15 @@ export const UseEffect = () => {
            addTodo(prevTodo => [...prevTodo, todo])
        }
     }
-    const handleDone = (el) => {
+    const handleDelete= (el) => {
       const i = todoList.indexOf(el)
        const newTodo = todoList.filter( (el, index) => i !== index )
         addTodo(newTodo)
     }
+    const handleSave = () => {
+       localStorage.removeItem("todoList")
+       localStorage.setItem("todoList", JSON.stringify(todoList))
+   }
     return (
         <>
             <h1>use Effect</h1>
@@ -25,7 +29,7 @@ export const UseEffect = () => {
                type={"text"}
                name={"todo"}
                value={todo}
-               onChange={() => setTodo(event.target.value)}
+               onChange={(e) => setTodo(e.target.value)}
            />
             <button
                 onClick={handleAdd}
@@ -33,20 +37,21 @@ export const UseEffect = () => {
             <div>
                 <h5>My todo list</h5>
                 <ul>
-                    {todoList.map( el => <li key={Math.floor(Math.random() * 100)}>{el} <button onClick={() => handleDone(el)}>Done</button> </li>)}
+                    {todoList.map( (el,index )=> <li
+                        key={index}
+                    >{el} <button onClick={() => handleDelete(el)}>Delete</button> </li>)}
                 </ul>
-                <button onClick={() => localStorage.setItem("todoList", JSON.stringify(todoList))}>Save Todo</button>
+                <button onClick={() => handleSave()}>Save Todo</button>
                 <br/>
                 <button onClick={() => setCount(count + 1)}>Calculate</button>
-                <p>you have calculated {calculation}</p>
+                <p>you have calculated {val}</p>
             </div>
         </>
     );
 }
 
 
-const expensiveCalculation = (num) => {
-    console.log("Calculating...");
+const delay = (num) => {
     for (let i = 0; i < 1000000000; i++) {
         num += 1;
     }
